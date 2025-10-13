@@ -125,6 +125,145 @@ const AddProduct = () => {
                   {/* Product fields same as before */}
                   {/* ... your existing input fields ... */}
 
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Product name</label>
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      placeholder="Product name"
+                      name="name"
+                      value={product.name}
+                      onChange={handleInputChange}
+                    />
+                    <small className="form-helper-text">
+                      Keep the name concise and descriptive.
+                    </small>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Brand</label>
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      placeholder="Brand"
+                      name="brand"
+                      value={product.brand}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-12">
+                    <label className="form-label fw-semibold">Description</label>
+                    <textarea
+                      className="form-control form-control-lg"
+                      placeholder="Highlight key features, warranty or updates"
+                      name="description"
+                      rows="3"
+                      value={product.description}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Price (INR)</label>
+                    <div className="input-group input-group-lg">
+                      <span className="input-group-text price-prefix">
+                        <BiRupee size={18} />
+                      </span>
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="Enter price in INR"
+                        name="price"
+                        value={product.price}
+                        min="0"
+                        step="0.01"
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <small className="form-helper-text">
+                      Displayed in ₹ for shoppers.
+                    </small>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Category</label>
+                    <select
+                      className="form-select form-select-lg"
+                      name="category"
+                      value={product.category}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select category</option>
+                      <option value="Laptop">Laptop</option>
+                      <option value="Headphone">Headphone</option>
+                      <option value="Mobile">Mobile</option>
+                      <option value="Electronics">Electronics</option>
+                      <option value="Toys">Toys</option>
+                      <option value="Fashion">Fashion</option>
+                    </select>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Stock quantity</label>
+                    <input
+                      type="number"
+                      className="form-control form-control-lg"
+                      placeholder="Units available"
+                      name="stockQuantity"
+                      value={product.stockQuantity}
+                      min="0"
+                      step="1"
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Release date</label>
+                    <input
+                      type="date"
+                      className="form-control form-control-lg"
+                      name="releaseDate"
+                      value={product.releaseDate}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Product image</label>
+                    <input
+                      className="form-control form-control-lg"
+                      type="file"
+                      name="image"
+                      onChange={handleImageChange}
+                    />
+                    <small className="form-helper-text">
+                      Recommended ratio 1:1 or 4:5.
+                    </small>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Preview</label>
+                    <div className="update-image-preview">
+                      {image ? (
+                        <img
+                          src={URL.createObjectURL(image)}
+                          alt={product.name || "Product preview"}
+                        />
+                      ) : (
+                        <div className="image-placeholder">Image unavailable</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 d-flex align-items-center">
+                    <div className="form-check form-switch form-switch-lg">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="addAvailability"
+                        checked={product.productAvailable}
+                        onChange={(e) =>
+                          setProduct({ ...product, productAvailable: e.target.checked })
+                        }
+                      />
+                      <label className="form-check-label ms-2" htmlFor="addAvailability">
+                        Product available for purchase
+                      </label>
+                    </div>
+                  </div>
+
                   <div className="col-12">
                     <div className="d-flex flex-wrap gap-3 justify-content-between align-items-center">
                       <div className="add-product-meta">

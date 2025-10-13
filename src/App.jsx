@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Cart from "./components/Cart";
@@ -18,6 +18,25 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    const nextClass = `${theme}-theme`;
+    const root = document.getElementById("root");
+    document.documentElement.classList.remove("light-theme", "dark-theme");
+    document.documentElement.classList.add(nextClass);
+    if (root) {
+      root.classList.remove("light-theme", "dark-theme");
+      root.classList.add(nextClass);
+    }
+    document.body.classList.remove("light-theme", "dark-theme");
+    document.body.classList.add(nextClass);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   const addToCart = (product) => {
     const existingProduct = cart.find((item) => item.id === product.id);
@@ -36,7 +55,7 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar theme={theme} onToggleTheme={toggleTheme} />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home addToCart={addToCart} />} />

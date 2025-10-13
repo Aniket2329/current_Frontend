@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FiShoppingCart } from "react-icons/fi";
 import API from "../axios";
 import AppContext from "../Context/Context";
 import unplugged from "../assets/unplugged.png"
@@ -54,118 +55,58 @@ const Home = () => {
   }
   return (
     <>
-      <div
-        className="grid"
-        style={{
-          marginTop: "64px",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "20px",
-          padding: "20px",
-        }}
-      >
+      <section className="home-hero">
+        <div className="home-hero__content">
+          <h1 className="home-hero__title">Discover tech that elevates everyday</h1>
+          <p className="home-hero__subtitle">
+            Curated gadgets and lifestyle products. Switch themes, explore categories, and add favourites to your cart instantly.
+          </p>
+        </div>
+        <div className="home-hero__cta">
+          <Link to="/cart" className="hero-cart-link">
+            <FiShoppingCart /> View Cart
+          </Link>
+        </div>
+      </section>
+
+      <div className="grid product-grid">
         {products.length === 0 ? (
-          <h2
-            className="text-center"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            No Products Available
-          </h2>
+          <h2 className="product-grid__empty">No Products Available</h2>
         ) : (
           products.map((product) => {
-            const { id, brand, name, price, productAvailable, imageUrl } =
-              product;
-            const cardStyle = {
-              width: "18rem",
-              height: "12rem",
-              boxShadow: "rgba(0, 0, 0, 0.24) 0px 2px 3px",
-              backgroundColor: productAvailable ? "var(--card-bg-clr)" : "rgba(148, 163, 184, 0.25)",
-            };
+            const { id, brand, name, price, productAvailable, imageUrl } = product;
             return (
-              <div
-                className="card mb-3"
-                style={{
-                  width: "250px",
-                  height: "360px",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                  borderRadius: "10px",
-                  overflow: "hidden", 
-                  backgroundColor: productAvailable ? "var(--card-bg-clr)" : "rgba(148, 163, 184, 0.25)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent:'flex-start',
-                  alignItems:'stretch'
-                }}
+              <article
+                className={`product-card ${productAvailable ? "product-card--active" : "product-card--inactive"}`}
                 key={id}
               >
-                <Link
-                  to={`/product/${id}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <img
-                    src={imageUrl}
-                    alt={name}
-                    style={{
-                      width: "100%",
-                      height: "150px", 
-                      objectFit: "cover",  
-                      padding: "5px",
-                      margin: "0",
-                      borderRadius: "10px 10px 10px 10px", 
-                    }}
-                  />
-                  <div
-                    className="card-body"
-                    style={{
-                      flexGrow: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      padding: "10px",
-                    }}
-                  >
-                    <div>
-                      <h5
-                        className="card-title"
-                        style={{ margin: "0 0 10px 0", fontSize: "1.2rem" }}
-                      >
-                        {name.toUpperCase()}
-                      </h5>
-                      <i
-                        className="card-brand"
-                        style={{ fontStyle: "italic", fontSize: "0.8rem" }}
-                      >
-                        {"~ " + brand}
-                      </i>
+                <Link to={`/product/${id}`} className="product-card__link">
+                  <div className="product-card__media">
+                    <img src={imageUrl} alt={name} loading="lazy" />
+                    {!productAvailable && <span className="product-card__badge">Out of stock</span>}
+                  </div>
+                  <div className="product-card__body">
+                    <div className="product-card__text">
+                      <h3 className="product-card__title">{name}</h3>
+                      <span className="product-card__brand">{brand}</span>
                     </div>
-                    <hr className="hr-line" style={{ margin: "10px 0" }} />
-                    <div className="home-cart-price">
-                      <h5
-                        className="card-text"
-                        style={{ fontWeight: "600", fontSize: "1.1rem",marginBottom:'5px' }}
+                    <div className="product-card__meta">
+                      <span className="product-card__price">₹{price}</span>
+                      <button
+                        className="product-card__cta"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addToCart(product);
+                        }}
+                        disabled={!productAvailable}
                       >
-                        <i className="bi bi-currency-rupee"></i>
-                        {price}
-                      </h5>
+                        <FiShoppingCart />
+                        <span>{productAvailable ? "Add" : "Unavailable"}</span>
+                      </button>
                     </div>
-                    <button
-                      className="btn-hover color-9"
-                      style={{margin:'10px 25px 0px '  }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addToCart(product);
-                      }}
-                      disabled={!productAvailable}
-                    >
-                      {productAvailable ? "Add to Cart" : "Out of Stock"}
-                    </button> 
                   </div>
                 </Link>
-              </div>
+              </article>
             );
           })
         )}

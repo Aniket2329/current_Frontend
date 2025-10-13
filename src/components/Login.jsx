@@ -5,10 +5,12 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const response = await fetch("http://localhost:8080/api/auth/login", {
@@ -30,37 +32,60 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-      setMessage("Error connecting to server");
+      setMessage("Wrong Credentials!");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  const messageClass = message
+    ? message.toLowerCase().includes("success")
+      ? "login-message login-message--success"
+      : "login-message login-message--error"
+    : "";
+
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-header">
+          <h2 className="login-title">Welcome back</h2>
+          <p className="login-subtitle">Sign in to access your dashboard.</p>
         </div>
-        <div style={{ marginTop: "10px" }}>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" style={{ marginTop: "15px" }}>
-          Login
-        </button>
-      </form>
-      {message && <p>{message}</p>}
+        <form className="login-form" onSubmit={handleLogin}>
+          <div className="login-field">
+            <label className="login-label" htmlFor="username">
+              Username
+            </label>
+            <input
+              id="username"
+              className="login-input"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
+              required
+            />
+          </div>
+          <div className="login-field">
+            <label className="login-label" htmlFor="password">
+              Password
+            </label>
+            <input
+              id="password"
+              className="login-input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <button className="login-submit" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Signing in..." : "Login"}
+          </button>
+        </form>
+        {message && <p className={messageClass}>{message}</p>}
+      </div>
     </div>
   );
 };

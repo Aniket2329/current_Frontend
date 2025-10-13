@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FiLogIn, FiLogOut, FiShoppingCart, FiSun, FiMoon } from "react-icons/fi";
 
-const Navbar = () => {
+const Navbar = ({ theme = "light", onToggleTheme }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,53 +19,76 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-surface">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          E-Commerce
+          <span className="brand-badge">SHOP</span>
+          ease
         </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
+        <div className="d-flex align-items-center gap-2 d-lg-none">
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={onToggleTheme}
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? <FiMoon /> : <FiSun />}
+          </button>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon" />
+          </button>
+        </div>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
+          <ul className="navbar-nav ms-auto align-items-lg-center">
+            {/* <li className="nav-item">
               <Link className="nav-link" to="/">
                 Home
               </Link>
+            </li> */}
+            <li className="nav-item">
+              <Link className="nav-link" to="/cart">
+                <FiShoppingCart className="me-1" />
+                Cart
+              </Link>
             </li>
-            {isLoggedIn ? (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/add_product">
-                    Add Product
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <button
-                    className="btn btn-outline-danger ms-2"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </li>
-              </>
-            ) : (
+            {isLoggedIn && (
               <li className="nav-item">
-                <Link className="btn btn-outline-primary" to="/login">
-                  Login
+                <Link className="nav-link" to="/add_product">
+                  Add Product
                 </Link>
               </li>
             )}
           </ul>
+          <div className="navbar-actions ms-lg-4">
+            <button
+              type="button"
+              className="theme-toggle d-none d-lg-flex"
+              onClick={onToggleTheme}
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? <FiMoon /> : <FiSun />}
+            </button>
+            {isLoggedIn ? (
+              <button
+                className="nav-btn nav-btn--ghost"
+                onClick={handleLogout}
+              >
+                <FiLogOut className="me-2" /> Logout
+              </button>
+            ) : (
+              <Link className="nav-btn nav-btn--primary" to="/login">
+                <FiLogIn className="me-2" /> Login
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </nav>
