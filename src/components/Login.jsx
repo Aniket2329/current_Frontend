@@ -13,7 +13,7 @@ const Login = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("https://website-x0za.onrender.com/api/auth/login", {
+      const response = await fetch("https://ecom-backend-z12z.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
